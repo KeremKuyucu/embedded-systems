@@ -5,6 +5,7 @@
 #include "rf_controller.h"
 #include "network_manager.h"
 #include "automation.h"
+#include "button.h"
 
 void setup() {
   Serial.begin(115200);
@@ -17,6 +18,7 @@ void setup() {
   loadSettingsFromNVS();
   initLeds();
   initRf();
+  initButton();
   initAutomation();
 
   setupWiFi();
@@ -33,6 +35,7 @@ void setup() {
 
 void loop() {
   feedWatchdog();
+  handleButton();
   handleWiFiRuntime();
   handleSinricPro();
   handleTemperatureAutomation();

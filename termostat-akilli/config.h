@@ -20,6 +20,7 @@
 // DİĞER DONANIM PİNLERİ:
 //    - GPIO 14                 : DHT11 Sıcaklık ve Nem Sensörü DATA Pini
 //    - GPIO 26                 : FS1000A 433MHz RF Verici DATA Pini
+//    - GPIO 23                 : D23 Manuel Kombi Kontrol Butonu (GND ile aktif - Dahili Pull-Up)
 // ============================================================================
 
 // ==========================================
@@ -40,6 +41,9 @@
 #define RF_PIN                      26   // FS1000A RF Verici DATA Pini
 #define DHTPIN                      14   // DHT11 Data Pini
 #define DHTTYPE                     DHT11
+
+#define BUTTON_PIN                  23   // D23 Buton Pini (Manuel Kombi Kontrolü)
+#define BUTTON_ACTIVE_LEVEL         LOW  // Buton tetiklenme seviyesi (GND baglantili: LOW, 3.3V baglantili: HIGH)
 
 // Durum LED Pinleri
 #define LED_BLUE                    25   // Mavi: Wi-Fi & Bulut Bağlantı Durumu (PWM ile sürülür)
@@ -64,6 +68,7 @@ const unsigned long RF_SYNC_INTERVAL_MS         = 300000;  // RF durum senkroniz
 const unsigned long WIFI_CHECK_INTERVAL_MS      = 10000;   // Wi-Fi kontrol aralığı: 10 sn
 const unsigned long WIFI_RECONNECT_COOLDOWN_MS  = 60000;   // Manuel yeniden bağlantı beklemesi: 60 sn
 const unsigned long NVS_SAVE_DEBOUNCE_MS        = 5000;    // NVS Flash kayıt debounce süresi: 5 sn
+const unsigned long BUTTON_DEBOUNCE_MS          = 50;      // Buton ark/titreme filtreleme suresi: 50 ms
 const unsigned long TEMP_CHECK_INTERVAL_MS      = 3000;    // Lokal sıcaklık kontrol aralığı: 3 sn
 const unsigned long CLOUD_REPORT_INTERVAL_MS    = 60000;   // Sinric Cloud raporlama aralığı: 60 sn
 

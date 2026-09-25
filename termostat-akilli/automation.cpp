@@ -4,6 +4,7 @@
 #include "storage.h"
 #include "rf_controller.h"
 #include "network_manager.h"
+#include "button.h"
 #include "watchdog.h"
 #include <DHT.h>
 
@@ -45,9 +46,11 @@ void handleTemperatureAutomation() {
     if (dhtFailCount >= DHT_MAX_CONSECUTIVE_FAILS) {
       setRedLed(true);
 
-      if (rfState) {
+      if (rfState && !manualOverrideActive) {
         Serial.println("[GUVENLIK]: Kalici sensor arizasi nedeniyle kombi KAPATILIYOR!");
         setRfState(false, true);
+      } else if (rfState && manualOverrideActive) {
+        Serial.println("[GUVENLIK]: Sensor arizali fakat D23 Manuel Mod devrede oldugu icin kombi ACIK tutuluyor!");
       }
 
       if (!dhtErrorActive) {
@@ -81,18 +84,28 @@ void handleTemperatureAutomation() {
     setRedLed(false);
   }
 
-  Serial.printf("[DHT11]: Sicaklik: %.1f C | Nem: %.1f %% | Hedef: %.1f C (±%.1f) | Mod: %s | Cihaz: %s\r\n",
+  Serial.printf("[DHT11]: Sicaklik: %.1f C | Nem: %.1f %% | Hedef: %.1f C (±%.1f) | Mod: %s | Cihaz: %s%s\r\n",
                 currentTemp,
                 currentHumidity,
                 targetTemperature,
                 hysteresis,
                 thermostatMode,
-                devicePowerState ? "ACIK" : "KAPALI");
+                devicePowerState ? "ACIK" : "KAPALI",
+                manualOverrideActive ? " | MANUEL MOD: ACIK" : "");
 
   // Bulut Raporlama (Rate-limit koruması: 60 saniyede bir gönderilir)
   if (sinricConnected && (currentMillis - lastCloudReport >= CLOUD_REPORT_INTERVAL_MS)) {
     lastCloudReport = currentMillis;
     sendTemperatureToCloud(currentTemp, currentHumidity);
+  }
+
+  // D23 Buton Manuel Modu Aktifse:
+  // Cihazın güç durumu veya derece ne olursa olsun kombi açık tutulur, otomasyon müdahale etmez.
+  if (manualOverrideActive) {
+    if (!rfState) {
+      setRfState(true, true);
+    }
+    return;
   }
 
   if (!devicePowerState || strcmp(thermostatMode, "OFF") == 0) {

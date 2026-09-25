@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <avr/pgmspace.h>
 
 #define TX_PIN 10
 
@@ -37,12 +36,16 @@ const uint16_t pktClose[] PROGMEM = {
 void sendSignal(const uint16_t *signalArray, uint16_t length) {
   for (int repeat = 0; repeat < 5; repeat++) {
     bool state = HIGH;
+
     for (uint16_t i = 0; i < length; i++) {
-      uint16_t duration = pgm_read_word_near(signalArray + i);
+      uint16_t duration = signalArray[i];
+
       digitalWrite(TX_PIN, state);
       delayMicroseconds(duration);
+
       state = !state;
     }
+
     digitalWrite(TX_PIN, LOW);
     delay(20);
   }

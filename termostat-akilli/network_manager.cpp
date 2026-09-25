@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "rf_controller.h"
 #include "automation.h"
+#include "button.h"
 #include <WiFi.h>
 #include <SinricPro.h>
 #include <SinricProThermostat.h>
@@ -22,7 +23,11 @@ static bool onPowerState(const String &deviceId, bool &state) {
     markSettingsChanged();
   }
   if (!devicePowerState) {
-    setRfState(false, true);
+    if (!manualOverrideActive) {
+      setRfState(false, true);
+    } else {
+      Serial.println("[SinricPro]: Cihaz kapatildi fakat D23 Manuel Mod devrede oldugu icin kombi ACIK tutuluyor.");
+    }
   } else {
     triggerImmediateTempCheck();
   }
@@ -62,7 +67,11 @@ static bool onThermostatMode(const String &deviceId, String &mode) {
   Serial.printf("[SinricPro]: Mod Degisti -> %s\r\n", thermostatMode);
   
   if (strcmp(thermostatMode, "OFF") == 0) {
-    setRfState(false, true);
+    if (!manualOverrideActive) {
+      setRfState(false, true);
+    } else {
+      Serial.println("[SinricPro]: Mod OFF yapildi fakat D23 Manuel Mod devrede oldugu icin kombi ACIK tutuluyor.");
+    }
   }
   triggerImmediateTempCheck();
   return true;
