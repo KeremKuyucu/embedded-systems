@@ -28,7 +28,7 @@ ESP32 üzerinde koşan gömülü web sunucusu ile yerel ağ üzerinden GPIO ve L
 
 ## 🛠️ Deneyap Kart & Atölye Çalışmaları (`Deneyap Kart/`)
 
-Bu bölüm; Teknofest, atölye eğitimleri ve hızlı prototipleme seanslarında Deneyap Kart (ESP32 tabanlı) ve Arduino platformları için geliştirilmiş laboratuvar kodlarıdır. Projeler işlevlerine göre 4 ana kategoride düzenlenmiştir:
+Bu bölüm; Deneyap, atölye eğitimleri ve hızlı prototipleme seanslarında Deneyap Kart (ESP32 tabanlı) ve Arduino platformları için geliştirilmiş laboratuvar kodlarıdır. Projeler işlevlerine göre 4 ana kategoride düzenlenmiştir:
 
 ### 🤖 [Robotik & Hareketli Sistemler](Deneyap%20Kart/robotik/)
 * **`bluetooth_araba/`** – Bluetooth üzerinden mobil uygulama ile yönlendirilen robot araba.
